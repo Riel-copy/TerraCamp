@@ -5,6 +5,10 @@ require_once __DIR__ . '/../config/koneksi.php';
 if (!isset($judul_halaman)) {
     $judul_halaman = 'TerraCamp';
 }
+
+// Dipakai untuk menentukan menu (aman walau belum login)
+$sudah_login = isset($_SESSION['id_user']);
+$role_user   = $_SESSION['role'] ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -21,9 +25,17 @@ if (!isset($judul_halaman)) {
     <div class="nav-links">
         <a href="<?= BASE_URL ?>/index.php">Beranda</a>
 
-        <?php if (isset($_SESSION['id_user'])): ?>
+        <?php if ($sudah_login): ?>
+
+            <a href="<?= BASE_URL ?>/pelanggan/alat.php">Katalog Alat</a>
+
+            <?php if ($role_user === 'admin'): ?>
+                <a href="<?= BASE_URL ?>/admin/index.php">Admin</a>
+            <?php endif; ?>
+
             <span class="nav-user">Halo, <?= htmlspecialchars($_SESSION['nama']) ?></span>
             <a href="<?= BASE_URL ?>/auth/logout.php">Logout</a>
+
         <?php else: ?>
             <a href="<?= BASE_URL ?>/auth/login.php">Login</a>
             <a href="<?= BASE_URL ?>/auth/register.php">Register</a>

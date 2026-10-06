@@ -15,17 +15,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $hasil = mysqli_stmt_get_result($stmt);
     $user  = mysqli_fetch_assoc($hasil);
 
-    // Kalau email ada DAN password cocok dengan hasil acakan
+    // Kalau email ada DAN password cocok
     if ($user && password_verify($password, $user['password'])) {
 
-        session_regenerate_id(true); // ganti "gelang" baru, lebih aman
+        session_regenerate_id(true);
 
         $_SESSION['id_user'] = $user['id_user'];
         $_SESSION['nama']    = $user['nama'];
         $_SESSION['role']    = $user['role'];
 
-        // Sementara semua ke beranda. Nanti kita arahkan sesuai role.
-        header('Location: ' . BASE_URL . '/index.php');
+        // Admin ke dashboard admin, pelanggan ke beranda
+        if ($user['role'] === 'admin') {
+            header('Location: ' . BASE_URL . '/admin/index.php');
+        } else {
+            header('Location: ' . BASE_URL . '/index.php');
+        }
         exit;
     } else {
         $error = 'Email atau password salah.';
