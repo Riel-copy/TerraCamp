@@ -1,5 +1,6 @@
 <?php
 require_once '../../includes/auth_check.php';
+require_once '../../includes/fungsi.php';
 wajib_admin();
 
 $error       = '';
@@ -28,17 +29,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($stok < 0) {
         $error = 'Stok tidak boleh minus.';
     } else {
-        // Alat baru: stok tersedia = stok total
-        $stmt = mysqli_prepare($koneksi,
-            "INSERT INTO alat (id_kategori, nama_alat, deskripsi, harga_sewa_per_hari, stok_total, stok_tersedia)
-             VALUES (?, ?, ?, ?, ?, ?)");
-        mysqli_stmt_bind_param($stmt, 'issiii',
-            $id_kategori, $nama, $deskripsi, $harga, $stok, $stok);
-        mysqli_stmt_execute($stmt);
+        // Proses foto (kalau ada yang dipilih)
+        $gambar = simpan_gambar_alat($_FILES['gambar'] ?? null, $error);
 
-        $_SESSION['pesan'] = 'Alat berhasil ditambahkan.';
-        header('Location: index.php');
-        exit;
+        // false = ada kesalahan (alasannya sudah ada di $error)
+        if ($gambar !== false) {
+            // Alat baru: stok tersedia = stok total
+            $stmt = mysqli_prepare($koneksi,
+                "INSERT INTO alat (id_kategori, nama_alat, deskripsi, harga_sewa_per_hari, stok_total, stok_tersedia, gambar)
+                 VALUES (?, ?, ?, ?, ?, ?, ?)");
+            mysqli_stmt_bind_param($stmt, 'issiiis',
+                $id_kategori, $nama, $deskripsi, $harga, $stok, $stok, $gambar);
+            mysqli_stmt_execute($stmt);
+
+            $_SESSION['pesan'] = 'Alat berhasil ditambahkan.';
+            header('Location: index.php');
+            exit;
+        }
     }
 }
 
@@ -53,7 +60,8 @@ require_once '../../includes/header.php';
         <p class="alert-error"><?= htmlspecialchars($error) ?></p>
     <?php endif; ?>
 
-    <form method="POST">
+    <!-- enctype wajib ada supaya formulir boleh mengirim file -->
+    <form method="POST" enctype="multipart/form-data">
         <label>Nama Alat</label>
         <input type="text" name="nama_alat" value="<?= htmlspecialchars($nama) ?>">
 
@@ -77,6 +85,11 @@ require_once '../../includes/header.php';
         <label>Jumlah Stok</label>
         <input type="number" name="stok" min="0" value="<?= $stok ?>">
 
+        <label>Foto Alat (opsional)</label>
+        <input type="file" name="gambar" accept="image/jpeg,image/png,image/webp">
+        <small class="petunjuk">Format JPG, PNG, atau WEBP. Maksimal 2 MB.</small>
+
+        <br>
         <button type="submit" class="btn">Simpan</button>
         <a href="index.php">Batal</a>
     </form>

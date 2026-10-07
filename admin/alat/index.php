@@ -1,5 +1,6 @@
 <?php
 require_once '../../includes/auth_check.php';
+require_once '../../includes/fungsi.php';
 wajib_admin();
 
 $judul_halaman = 'Data Alat';
@@ -33,6 +34,7 @@ require_once '../../includes/header.php';
     <table class="tabel">
         <tr>
             <th>No</th>
+            <th>Foto</th>
             <th>Nama Alat</th>
             <th>Kategori</th>
             <th>Harga / Hari</th>
@@ -43,9 +45,14 @@ require_once '../../includes/header.php';
         <?php $no = 1; while ($row = mysqli_fetch_assoc($hasil)): ?>
         <tr>
             <td><?= $no++ ?></td>
+            <td>
+                <div class="thumb">
+                    <?= tampil_gambar_alat($row['gambar'], $row['nama_kategori'], $row['nama_alat']) ?>
+                </div>
+            </td>
             <td><?= htmlspecialchars($row['nama_alat']) ?></td>
             <td><?= htmlspecialchars($row['nama_kategori']) ?></td>
-            <td>Rp <?= number_format($row['harga_sewa_per_hari'], 0, ',', '.') ?></td>
+            <td><?= rupiah($row['harga_sewa_per_hari']) ?></td>
             <td><?= $row['stok_tersedia'] ?> / <?= $row['stok_total'] ?></td>
             <td>
                 <a class="btn-kecil" href="edit.php?id=<?= $row['id_alat'] ?>">Edit</a>
