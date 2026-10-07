@@ -16,7 +16,9 @@ $role_user   = $_SESSION['role'] ?? '';
 $kelas_main = !empty($lebar_penuh) ? 'main-penuh' : 'container';
 
 // Nomor versi CSS = waktu file terakhir diubah (supaya browser selalu ambil yang terbaru)
-$versi_css = @filemtime(__DIR__ . '/../assets/css/style.css');
+$versi_css      = @filemtime(__DIR__ . '/../assets/css/style.css');
+$versi_beranda  = @filemtime(__DIR__ . '/../assets/css/beranda.css');
+$versi_tambahan = @filemtime(__DIR__ . '/../assets/css/tambahan.css');
 
 // ---------- Logo ----------
 // Mencari file logo di folder assets/img (logo.png / logo.svg / logo.webp / logo.jpg)
@@ -38,7 +40,15 @@ $logo_sudah_ada_tulisan = false;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($judul_halaman) ?> | TerraCamp</title>
+
+    <!-- Urutan penting: style.css dulu, lalu beranda.css, lalu tambahan.css -->
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css?v=<?= $versi_css ?>">
+    <?php if ($versi_beranda): ?>
+        <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/beranda.css?v=<?= $versi_beranda ?>">
+    <?php endif; ?>
+    <?php if ($versi_tambahan): ?>
+        <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/tambahan.css?v=<?= $versi_tambahan ?>">
+    <?php endif; ?>
 </head>
 <body>
 

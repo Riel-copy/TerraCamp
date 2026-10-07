@@ -1,0 +1,202 @@
+/* =====================================================
+   beranda.css
+   Tampilan halaman Beranda: hero, kategori, alat populer,
+   cara sewa, dan banner.
+   ===================================================== */
+
+/* ---------- Hero ---------- */
+/* Foto latar: simpan sebagai assets/img/hero.jpg
+   Kalau fotonya tidak ada, hero tampil hijau polos. */
+.hero {
+    display: flex;
+    align-items: center;
+    min-height: 460px;
+    padding: 60px 0;
+    background:
+        linear-gradient(90deg,
+            rgba(15, 40, 28, 0.88) 0%,
+            rgba(15, 40, 28, 0.58) 45%,
+            rgba(15, 40, 28, 0.10) 100%),
+        url('../img/hero.jpg') center / cover no-repeat,
+        #2e6b3f;
+    color: #fff;
+}
+
+.hero .container {
+    width: 100%;
+}
+
+.hero h1 {
+    font-size: 42px;
+    line-height: 1.2;
+    margin: 0 0 12px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.hero p {
+    max-width: 480px;
+    margin: 0;
+    line-height: 1.5;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+}
+
+.hero-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: flex-end;
+    max-width: 580px;
+    margin-top: 28px;
+    padding: 14px 18px;
+    background: #fff;
+    color: #2d3a2d;
+    border-radius: 10px;
+    text-shadow: none;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.hero-form label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 12px;
+    color: #6b7d6b;
+}
+
+.hero-form input {
+    padding: 9px;
+    border: 1px solid #b9c7b9;
+    border-radius: 6px;
+}
+
+.hero-form .btn {
+    margin-top: 0;
+    padding: 11px 26px;
+}
+
+/* ---------- Bagian-bagian Beranda ---------- */
+.section {
+    padding: 34px 0 6px;
+}
+
+.judul-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.judul-section h2 {
+    margin: 0;
+}
+
+.judul-section a {
+    color: #2e6b3f;
+    font-size: 14px;
+}
+
+/* ---------- Kategori ---------- */
+.kategori-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 14px;
+}
+
+.kategori-item {
+    display: block;
+    text-align: center;
+    padding: 16px 8px;
+    background: #fff;
+    color: #2d3a2d;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.kategori-item:hover {
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+}
+
+.kategori-ikon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 8px;
+    line-height: 64px;
+    font-size: 34px;
+    background: #e6f0e8;
+    border-radius: 12px;
+}
+
+/* ---------- Cara sewa ---------- */
+.cara-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.langkah {
+    background: #fff;
+    padding: 18px;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.langkah-nomor {
+    display: inline-block;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+    text-align: center;
+    background: #2e6b3f;
+    color: #fff;
+    border-radius: 50%;
+    font-weight: bold;
+}
+
+.langkah h3 {
+    margin: 10px 0 6px;
+    font-size: 16px;
+}
+
+.langkah p {
+    margin: 0;
+    font-size: 14px;
+    color: #6b7d6b;
+    line-height: 1.5;
+}
+
+/* ---------- Banner ---------- */
+/* Foto latar: simpan sebagai assets/img/banner.jpg (opsional).
+   Kalau tidak ada, banner tampil hijau tua polos. */
+.banner {
+    margin-top: 40px;
+    padding: 64px 0;
+    background:
+        linear-gradient(90deg,
+            rgba(15, 40, 28, 0.92) 0%,
+            rgba(15, 40, 28, 0.70) 50%,
+            rgba(15, 40, 28, 0.15) 100%),
+        url('../img/banner.jpg') center / cover no-repeat,
+        #1e4d36;
+    color: #fff;
+}
+
+.banner h2 {
+    margin: 0 0 8px;
+    font-size: 28px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.banner p {
+    margin: 0;
+}
+
+.banner .btn {
+    background: #cfe5d3;
+    color: #1e4d36;
+    font-weight: bold;
+}
+
+.banner .btn:hover {
+    background: #fff;
+}

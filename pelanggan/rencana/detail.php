@@ -26,30 +26,45 @@ mysqli_stmt_bind_param($stmt, 'i', $id);
 mysqli_stmt_execute($stmt);
 $sewa_aktif = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
 
-// Ambil alat-alat di dalam rencana ini
-$stmt2 = mysqli_prepare($koneksi,
+// Ambil alat-alat di dalam rencana ini (lengkap dengan foto)
+$stmt = mysqli_prepare($koneksi,
     "SELECT ri.id_rencana_item, ri.jumlah,
-            a.nama_alat, a.harga_sewa_per_hari, a.stok_tersedia
+            a.nama_alat, a.gambar, a.harga_sewa_per_hari, a.stok_tersedia,
+            k.nama_kategori
      FROM rencana_item ri
      JOIN alat a ON ri.id_alat = a.id_alat
+     JOIN kategori_alat k ON a.id_kategori = k.id_kategori
      WHERE ri.id_rencana = ?
      ORDER BY a.nama_alat");
-mysqli_stmt_bind_param($stmt2, 'i', $id);
-mysqli_stmt_execute($stmt2);
-$items = mysqli_stmt_get_result($stmt2);
+mysqli_stmt_bind_param($stmt, 'i', $id);
+mysqli_stmt_execute($stmt);
+$hasil = mysqli_stmt_get_result($stmt);
 
+$daftar_item = [];
+while ($row = mysqli_fetch_assoc($hasil)) {
+    $daftar_item[] = $row;
+}
+
+// Hitung total dan cek stok
+$durasi          = (int) $rencana['durasi_hari'];
 $total           = 0;
 $ada_stok_kurang = false;
-$jumlah_item     = mysqli_num_rows($items);
 
-$judul_halaman = 'Detail Rencana';
+foreach ($daftar_item as $it) {
+    $total += $it['harga_sewa_per_hari'] * $it['jumlah'] * $durasi;
+    if ($it['jumlah'] > $it['stok_tersedia']) {
+        $ada_stok_kurang = true;
+    }
+}
+
+$judul_halaman = 'Rencana: ' . $rencana['nama_rencana'];
 require_once '../../includes/header.php';
 ?>
 
 <div class="card">
     <div class="kepala-halaman">
         <h2><?= htmlspecialchars($rencana['nama_rencana']) ?></h2>
-        <a href="index.php">&laquo; Kembali</a>
+        <a href="index.php">&laquo; Semua Rencana</a>
     </div>
 
     <?php if (isset($_SESSION['pesan'])): ?>
@@ -62,45 +77,65 @@ require_once '../../includes/header.php';
         <?php unset($_SESSION['pesan_error']); ?>
     <?php endif; ?>
 
-    <p>
-        <strong>Lokasi:</strong> <?= htmlspecialchars($rencana['lokasi'] ?: '-') ?><br>
-        <strong>Tanggal mulai:</strong> <?= date('d-m-Y', strtotime($rencana['tanggal_mulai'])) ?><br>
-        <strong>Durasi:</strong> <?= $rencana['durasi_hari'] ?> hari<br>
-        <strong>Jumlah orang:</strong> <?= $rencana['jumlah_orang'] ?><br>
-        <strong>Catatan:</strong> <?= htmlspecialchars($rencana['catatan'] ?: '-') ?>
-    </p>
+    <div class="info-rencana">
+        <span><strong>Lokasi:</strong> <?= htmlspecialchars($rencana['lokasi'] ?: '-') ?></span>
+        <span><strong>Mulai:</strong> <?= date('d-m-Y', strtotime($rencana['tanggal_mulai'])) ?></span>
+        <span><strong>Durasi:</strong> <?= $durasi ?> hari</span>
+        <span><strong>Jumlah orang:</strong> <?= $rencana['jumlah_orang'] ?></span>
+    </div>
+
+    <?php if (!empty($rencana['catatan'])): ?>
+        <p class="petunjuk">Catatan: <?= htmlspecialchars($rencana['catatan']) ?></p>
+    <?php endif; ?>
 </div>
 
 <div class="card">
-    <div class="kepala-halaman">
-        <h3>Alat dalam Rencana</h3>
-        <a class="btn" href="../alat.php">+ Tambah Alat dari Katalog</a>
-    </div>
+    <h3>Keranjang Alat</h3>
+    <p class="petunjuk">Cek kembali alat yang akan kamu sewa sebelum mengajukan.</p>
 
-    <?php if ($jumlah_item === 0): ?>
-        <p>Belum ada alat. Buka <strong>Katalog Alat</strong> lalu pilih alat untuk rencana ini.</p>
+    <?php if (count($daftar_item) === 0): ?>
+
+        <p>Keranjang masih kosong. Pilih alat dari katalog untuk rencana ini.</p>
+        <a class="btn" href="../alat.php">Buka Katalog</a>
+
     <?php else: ?>
+
         <table class="tabel">
             <tr>
                 <th>Alat</th>
                 <th>Harga / Hari</th>
+                <th>Durasi</th>
                 <th>Jumlah</th>
-                <th>Subtotal (<?= $rencana['durasi_hari'] ?> hari)</th>
+                <th>Subtotal</th>
                 <th>Stok</th>
-                <th>Aksi</th>
+                <th></th>
             </tr>
 
-            <?php while ($row = mysqli_fetch_assoc($items)):
-                $subtotal = $row['harga_sewa_per_hari'] * $row['jumlah'] * $rencana['durasi_hari'];
-                $total   += $subtotal;
+            <?php foreach ($daftar_item as $row):
+                $subtotal = $row['harga_sewa_per_hari'] * $row['jumlah'] * $durasi;
                 $kurang   = $row['jumlah'] > $row['stok_tersedia'];
-                if ($kurang) { $ada_stok_kurang = true; }
             ?>
             <tr>
-                <td><?= htmlspecialchars($row['nama_alat']) ?></td>
-                <td>Rp <?= number_format($row['harga_sewa_per_hari'], 0, ',', '.') ?></td>
-                <td><?= $row['jumlah'] ?></td>
-                <td>Rp <?= number_format($subtotal, 0, ',', '.') ?></td>
+                <td>
+                    <div class="item-nama">
+                        <div class="thumb">
+                            <?= tampil_gambar_alat($row['gambar'], $row['nama_kategori'], $row['nama_alat']) ?>
+                        </div>
+                        <strong><?= htmlspecialchars($row['nama_alat']) ?></strong>
+                    </div>
+                </td>
+                <td><?= rupiah($row['harga_sewa_per_hari']) ?></td>
+                <td><?= $durasi ?> hari</td>
+                <td>
+                    <!-- Tombol - dan + : satu formulir, dua tombol -->
+                    <form method="POST" action="ubah_item.php" class="qty">
+                        <input type="hidden" name="id_rencana_item" value="<?= $row['id_rencana_item'] ?>">
+                        <button type="submit" name="aksi" value="kurang" title="Kurangi">&minus;</button>
+                        <span><?= $row['jumlah'] ?></span>
+                        <button type="submit" name="aksi" value="tambah" title="Tambah">+</button>
+                    </form>
+                </td>
+                <td><?= rupiah($subtotal) ?></td>
                 <td>
                     <?php if ($kurang): ?>
                         <span class="badge-habis">Kurang (sisa <?= $row['stok_tersedia'] ?>)</span>
@@ -113,37 +148,47 @@ require_once '../../includes/header.php';
                           onsubmit="return confirm('Keluarkan alat ini dari rencana?')">
                         <input type="hidden" name="id_rencana_item" value="<?= $row['id_rencana_item'] ?>">
                         <input type="hidden" name="id_rencana" value="<?= $id ?>">
-                        <button type="submit" class="btn-kecil btn-merah">Keluarkan</button>
+                        <button type="submit" class="btn-kecil btn-merah">Hapus</button>
                     </form>
                 </td>
             </tr>
-            <?php endwhile; ?>
-
-            <tr>
-                <th colspan="3">Estimasi Total Biaya</th>
-                <th colspan="3">Rp <?= number_format($total, 0, ',', '.') ?></th>
-            </tr>
+            <?php endforeach; ?>
         </table>
 
         <?php if ($ada_stok_kurang): ?>
             <p class="alert-error">
-                Ada alat yang stoknya kurang. Keluarkan alatnya lalu tambahkan lagi dengan jumlah lebih sedikit.
+                Ada alat yang stoknya kurang. Kurangi jumlahnya dengan tombol &minus; atau hapus alatnya.
             </p>
         <?php endif; ?>
 
-        <!-- Tombol Ajukan Sewa -->
-        <?php if ($sewa_aktif): ?>
-            <p class="alert-sukses">
-                Rencana ini sudah diajukan.
-                <a href="../sewa/detail.php?id=<?= $sewa_aktif['id_sewa'] ?>">Lihat status penyewaan</a>
-            </p>
-        <?php elseif (!$ada_stok_kurang): ?>
-            <form method="POST" action="../sewa/ajukan.php"
-                  onsubmit="return confirm('Ajukan sewa sekarang? Harga akan dikunci.')">
-                <input type="hidden" name="id_rencana" value="<?= $id ?>">
-                <button type="submit" class="btn">Ajukan Sewa</button>
-            </form>
-        <?php endif; ?>
+        <div class="keranjang-bawah">
+            <a class="btn btn-garis" href="../alat.php">&laquo; Lanjut Belanja</a>
+
+            <div class="kotak-total">
+                <div class="baris">
+                    <span>Jumlah jenis alat</span>
+                    <span><?= count($daftar_item) ?></span>
+                </div>
+                <div class="baris">
+                    <span>Durasi sewa</span>
+                    <span><?= $durasi ?> hari</span>
+                </div>
+                <div class="baris total">
+                    <span>Total</span>
+                    <span><?= rupiah($total) ?></span>
+                </div>
+
+                <?php if ($sewa_aktif): ?>
+                    <p class="alert-sukses">
+                        Rencana ini sudah diajukan.
+                        <a href="../sewa/detail.php?id=<?= $sewa_aktif['id_sewa'] ?>">Lihat status</a>
+                    </p>
+                <?php elseif (!$ada_stok_kurang): ?>
+                    <a class="btn" href="../sewa/ringkasan.php?id=<?= $id ?>">Lanjut Ajukan Sewa</a>
+                <?php endif; ?>
+            </div>
+        </div>
+
     <?php endif; ?>
 </div>
 

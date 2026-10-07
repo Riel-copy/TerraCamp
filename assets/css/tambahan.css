@@ -1,0 +1,604 @@
+/* =====================================================
+   tambahan.css
+   Berisi tampilan untuk: kartu alat, katalog, detail alat,
+   foto kecil, keranjang (Rencana), ringkasan pengajuan,
+   riwayat penyewaan, dan footer.
+   File ini dibaca SETELAH style.css.
+   ===================================================== */
+
+/* ---------- Kartu alat (dipakai di Beranda dan Katalog) ---------- */
+.produk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.produk-card {
+    background: #fff;
+    padding: 14px;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.produk-card h3 {
+    margin: 10px 0 4px;
+    font-size: 16px;
+}
+
+.produk-card p {
+    margin: 4px 0;
+}
+
+.produk-card .btn {
+    display: block;
+    text-align: center;
+    margin-top: 12px;
+}
+
+.produk-gambar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 150px;
+    overflow: hidden;
+    background: #e6f0e8;
+    border-radius: 8px;
+}
+
+.produk-gambar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ikon-alat {
+    font-size: 56px;
+}
+
+/* ---------- Katalog: filter di kiri, daftar di kanan ---------- */
+.katalog-kepala h2 {
+    margin: 0 0 4px;
+}
+
+.katalog-kepala p {
+    margin: 0 0 18px;
+}
+
+.katalog-layout {
+    display: grid;
+    grid-template-columns: 230px 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.sidebar-filter {
+    margin-bottom: 0;
+}
+
+.sidebar-filter h4 {
+    margin: 18px 0 8px;
+}
+
+.sidebar-filter h4:first-child {
+    margin-top: 0;
+}
+
+.sidebar-filter label {
+    display: block;
+    margin: 7px 0;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.sidebar-filter input[type="date"] {
+    width: 100%;
+    margin-bottom: 8px;
+    padding: 8px;
+    border: 1px solid #b9c7b9;
+    border-radius: 6px;
+}
+
+.sidebar-filter .btn {
+    width: 100%;
+    margin-top: 16px;
+}
+
+.sidebar-filter .reset {
+    display: block;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 14px;
+    color: #2e6b3f;
+}
+
+.cari-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.cari-bar input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #b9c7b9;
+    border-radius: 6px;
+}
+
+.cari-bar .btn {
+    margin-top: 0;
+}
+
+.estimasi {
+    margin: 4px 0;
+    font-size: 13px;
+    color: #6b7d6b;
+}
+
+.paging {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    margin: 26px 0 10px;
+}
+
+.paging a,
+.paging span {
+    padding: 8px 13px;
+    background: #fff;
+    color: #2d3a2d;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.paging a:hover {
+    background: #e6f0e8;
+}
+
+.paging .aktif {
+    background: #2e6b3f;
+    color: #fff;
+}
+
+.paging .mati {
+    opacity: 0.4;
+}
+
+/* ---------- Detail alat ---------- */
+.breadcrumb {
+    margin-bottom: 14px;
+    font-size: 14px;
+    color: #6b7d6b;
+}
+
+.breadcrumb a {
+    color: #2e6b3f;
+}
+
+.detail-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+}
+
+.detail-foto {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 340px;
+    overflow: hidden;
+    background: #e6f0e8;
+    border-radius: 10px;
+}
+
+.detail-foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.detail-foto .ikon-alat {
+    font-size: 110px;
+}
+
+.detail-info h1 {
+    margin: 4px 0 8px;
+}
+
+.detail-harga {
+    margin: 0 0 14px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #2e6b3f;
+}
+
+.detail-info p {
+    line-height: 1.6;
+}
+
+.hasil-hitung {
+    margin-top: 14px;
+    padding: 12px 14px;
+    background: #e6f0e8;
+    border-radius: 8px;
+    line-height: 1.7;
+}
+
+.form-hitung {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-end;
+}
+
+.form-hitung label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 12px;
+    color: #6b7d6b;
+}
+
+.form-hitung input,
+.form-hitung select {
+    padding: 9px;
+    border: 1px solid #b9c7b9;
+    border-radius: 6px;
+}
+
+.form-hitung .btn {
+    margin-top: 0;
+}
+
+/* ---------- Foto kecil ---------- */
+.thumb {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+    overflow: hidden;
+    background: #e6f0e8;
+    border-radius: 8px;
+}
+
+.thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.thumb .ikon-alat {
+    font-size: 28px;
+}
+
+/* ---------- Tombol berbingkai ---------- */
+.btn-garis {
+    background: #fff;
+    color: #2e6b3f;
+    border: 1px solid #2e6b3f;
+}
+
+.btn-garis:hover {
+    background: #e6f0e8;
+    color: #1e4d36;
+}
+
+/* ---------- Keranjang (halaman Rencana) ---------- */
+.info-rencana {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+.item-nama {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.qty {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #b9c7b9;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.qty button {
+    width: 30px;
+    height: 32px;
+    border: none;
+    background: #e6f0e8;
+    color: #1e4d36;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.qty button:hover {
+    background: #cfe5d3;
+}
+
+.qty span {
+    min-width: 36px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.keranjang-bawah {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-top: 18px;
+}
+
+.kotak-total {
+    min-width: 280px;
+    padding: 16px;
+    background: #e6f0e8;
+    border-radius: 10px;
+}
+
+.kotak-total .baris {
+    display: flex;
+    justify-content: space-between;
+    margin: 6px 0;
+    font-size: 14px;
+}
+
+.kotak-total .total {
+    font-size: 18px;
+    font-weight: bold;
+    color: #1e4d36;
+}
+
+.kotak-total .btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+/* ---------- Ringkasan pengajuan (checkout) ---------- */
+.ringkasan-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.ringkasan-layout h3 {
+    margin: 0 0 10px;
+}
+
+.ringkasan-layout h3:not(:first-child) {
+    margin-top: 22px;
+}
+
+.baris-info {
+    margin: 8px 0;
+    font-size: 14px;
+}
+
+.item-ringkas {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #dde5dd;
+}
+
+.item-ringkas .isi {
+    flex: 1;
+    font-size: 14px;
+}
+
+.item-ringkas .isi small {
+    color: #6b7d6b;
+}
+
+.harga-ringkas {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.catatan-info {
+    margin: 16px 0 0;
+    padding: 12px 14px;
+    background: #e6f0e8;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* ---------- Riwayat penyewaan ---------- */
+.tab-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid #dde5dd;
+}
+
+.tab {
+    padding: 10px 16px;
+    border-bottom: 3px solid transparent;
+    font-size: 14px;
+    color: #6b7d6b;
+    text-decoration: none;
+}
+
+.tab:hover {
+    color: #1e4d36;
+}
+
+.tab.aktif {
+    border-bottom-color: #2e6b3f;
+    font-weight: bold;
+    color: #1e4d36;
+}
+
+.tab .jumlah {
+    display: inline-block;
+    min-width: 22px;
+    margin-left: 4px;
+    padding: 1px 7px;
+    background: #e6f0e8;
+    border-radius: 10px;
+    font-size: 12px;
+    text-align: center;
+}
+
+.riwayat-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid #dde5dd;
+}
+
+.riwayat-item:last-child {
+    border-bottom: none;
+}
+
+.foto-baris {
+    display: flex;
+    gap: 6px;
+}
+
+.riwayat-isi {
+    flex: 1;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.riwayat-isi small {
+    color: #6b7d6b;
+}
+
+.riwayat-kanan {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.denda-teks {
+    font-weight: bold;
+    color: #8a1f1f;
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+    background: #1e4d36;
+    color: #dbe7dd;
+    margin-top: 0;
+    padding: 36px 40px 16px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.footer-brand {
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.footer-logo {
+    display: block;
+    height: 44px;
+    width: auto;
+    margin-bottom: 8px;
+}
+
+.site-footer h4 {
+    margin: 0 0 10px;
+    color: #fff;
+}
+
+.site-footer p {
+    margin: 6px 0;
+    font-size: 14px;
+}
+
+.site-footer a {
+    color: #dbe7dd;
+    text-decoration: none;
+}
+
+.site-footer a:hover {
+    text-decoration: underline;
+}
+
+.footer-bawah {
+    max-width: 1100px;
+    margin: 24px auto 0;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+    font-size: 13px;
+}
+
+/* ---------- Layar kecil (HP) ---------- */
+@media (max-width: 800px) {
+    .katalog-layout,
+    .detail-layout,
+    .ringkasan-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .keranjang-bawah .kotak-total {
+        width: 100%;
+    }
+
+    .riwayat-item {
+        flex-wrap: wrap;
+    }
+
+    .riwayat-kanan {
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 700px) {
+    .navbar {
+        padding: 12px 16px;
+    }
+
+    .site-footer {
+        padding: 28px 16px 14px;
+    }
+
+    /* Di HP, lapisan gelap dibuat merata supaya tulisan tetap terbaca */
+    .hero {
+        min-height: 0;
+        padding: 44px 0 50px;
+        background:
+            linear-gradient(rgba(15, 40, 28, 0.70), rgba(15, 40, 28, 0.60)),
+            url('../img/hero.jpg') center / cover no-repeat,
+            #2e6b3f;
+    }
+
+    .hero h1 {
+        font-size: 28px;
+    }
+
+    .banner {
+        padding: 44px 0;
+        background:
+            linear-gradient(rgba(15, 40, 28, 0.80), rgba(15, 40, 28, 0.70)),
+            url('../img/banner.jpg') center / cover no-repeat,
+            #1e4d36;
+    }
+}
